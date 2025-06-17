@@ -1,0 +1,50 @@
+{
+    "inputs": [
+        {
+            "name": "File options",
+            "description": "Files needed to build the genome.",
+            "from_fileset": true,
+            "fileset_requires_organism": true,
+            "params": {
+                "fasta": {
+                    "name": "FASTA",
+                    "type": "data",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "fileset_pattern": "fasta",
+                    "required": true,
+                    "description": "A raw genome FASTA file."
+                },
+                "gtf": {
+                    "name": "GTF",
+                    "type": "data",
+                    "pattern": "^\\S+\\.gtf(\\.gz)?$",
+                    "fileset_pattern": "^\\S+\\.gtf(\\.gz)?$",
+                    "required": true,
+                    "description": "An annotation for the genome."
+                },
+                "contaminants_fasta": {
+                    "name": "Contaminants FASTA",
+                    "type": "data",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "fileset_pattern": "contaminants_fasta",
+                    "required": true,
+                    "description": "FASTA file to be mapped to before the genome file, containing rRNA, tRNA sequences, snRNAs and other contaminant sequences."
+                }
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "STAR Index",
+            "description": "A genome index which STAR can align reads to.",
+            "process": "STAR_GENOMEGENERATE",
+            "filetype": ""
+        },
+        {
+            "name": "Bowtie Index",
+            "description": "A genome index which Bowtie can align reads to.",
+            "process": "BOWTIE_BUILD",
+            "filetype": ""
+        }
+    ]
+}
