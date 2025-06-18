@@ -1,4 +1,4 @@
-include { PREPARE_RIBOSEQ_REFERENCE } from '../../subworkflows/local/prepare_reference.nf'
+include { PREPARE_RIBOSEQ_REFERENCE } from '../../subworkflows/prepare_reference.nf'
 
 workflow {
     PREPARE_RIBOSEQ_REFERENCE (

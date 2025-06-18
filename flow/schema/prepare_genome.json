@@ -43,8 +43,14 @@
         {
             "name": "Bowtie Index",
             "description": "A genome index which Bowtie can align reads to.",
-            "process": "BOWTIE_BUILD",
-            "filetype": ""
+            "process": "BOWTIE2_BUILD",
+            "filetype": "\\.bt2"
+        },
+        {
+            "name": "Faidx Index",
+            "description": "Sequence start positions.",
+            "process": "SAMTOOLS_FAIDX",
+            "filetype": "\\.fa\\.fai"
         }
     ]
 }
