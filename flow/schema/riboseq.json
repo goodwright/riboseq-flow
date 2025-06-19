@@ -1,0 +1,397 @@
+{
+    "inputs": [
+        {
+            "name": "Sample options",
+            "description": "Parameters relating to the sample being analysed.",
+            "advanced": false,
+            "params": {
+                "input": {
+                    "name": "Samples",
+                    "description": "The samples to process.",
+                    "required": true,
+                    "type": "csv",
+                    "takes_samples": true,
+                    "sample_types": ["Ribo-Seq"],
+                    "columns": [
+                        {
+                            "name": "sample",
+                            "type": "string",
+                            "from_sample": "name",
+                            "required": true,
+                            "render": false
+                        },
+                        {
+                            "name": "fastq_1",
+                            "type": "data",
+                            "from_sample": 1,
+                            "required": true,
+                            "render": false
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Genome options",
+            "description": "The genome being aligned to.",
+            "advanced": false,
+            "from_execution": true,
+            "params": {
+                "fasta": {
+                    "name": "FASTA",
+                    "type": "data",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "required": true,
+                    "execution_output": {
+                        "process": null,
+                        "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$"
+                    },
+                    "description": "A raw genome FASTA file."
+                },
+                "gtf": {
+                    "name": "GTF",
+                    "type": "data",
+                    "pattern": "^\\S+\\.gtf(\\.gz)?$",
+                    "required": true,
+                    "execution_output": {
+                        "process": null,
+                        "pattern": "^\\S+\\.gtf(\\.gz)?$"
+                    },
+                    "description": "An annotation for the genome."
+                },
+                "contaminant_fasta": {
+                    "name": "contaminant sequences FASTA",
+                    "type": "file",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "required": true,
+                    "execution_output": {
+                        "process": null,
+                        "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$"
+                    },
+                    "description": "FASTA file to be mapped to before the genome file, containing rRNA, tRNA sequences, snRNAs and other contaminant sequences."
+                },
+                "star_index": {
+                    "name": "STAR Index",
+                    "type": "data",
+                    "pattern": "",
+                    "required": false,
+                    "execution_output": {
+                        "process": "STAR_GENOMEGENERATE",
+                        "pattern": ""
+                    },
+                    "description": "A genome index built with STAR."
+                }
+            }
+        },
+        {
+            "name": "UMI Settings",
+            "description": "Settings for dealing with UMIs",
+            "advanced" : false,
+            "properties": {
+                "with_umi": {
+                    "name": "Deduplicate based on UMIs",
+                    "description": "Enable UMI-based read deduplication.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "skip_umi_extract": {
+                    "name": "Skip UMI extraction",
+                    "description": "Skip the UMI extraction from the read in case the UMIs have been moved to the headers in advance of the pipeline run.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "umi_extract_method": {
+                    "name": "Type of UMI pattern",
+                    "description": "UMI pattern to use. Can be either 'string' (default) or 'regex'.",
+                    "type": "string",
+                    "default": "string"
+                },
+                "umi_pattern": {
+                    "name": "UMI Tools barcode pattern",
+                    "description": "The UMI barcode pattern to use if the UMI is on read 1 e.g. 'NNNNNN' indicates that the first 6 nucleotides of the read are from the UMI.",
+                    "type": "string"
+                },
+                "umi_separator": {
+                    "name": "UMI Tools barcode separator",
+                    "description": "The UMI barcode separator in read name to use for UMI-based deduplication",
+                    "type": "string",
+                    "default": "_"
+                }
+            }
+        },
+        {
+            "name": "Read Processing Settings",
+            "description": "Settings to control read quality, adaptor trimming, removal of bases from read ends and filtering based on a minimum length threshold.",
+            "advanced" : false,
+            "properties": {
+                "skip_trimming": {
+                    "name": "Skip trimming and length-filtering",
+                    "description": "Skip the adapter trimming step and read length filtering step.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "adapter_threeprime": {
+                    "name": "3' adaptor",
+                    "description": "3' adaptor sequence for Cutadapt trimming",
+                    "type": "string",
+                    "default": null
+                },
+                "adapter_fiveprime": {
+                    "name": "5' adaptor",
+                    "description": "5' adaptor sequence for Cutadapt trimming",
+                    "type": "string"
+                },
+                "minimum_quality": {
+                    "name": "Minimum score for quality trimming",
+                    "description": "Cutoff value for Cutadapt trimming low-quality ends from reads.",
+                    "type": "number",
+                    "default": 10
+                },
+                "minimum_length": {
+                    "name": "Minimum read length",
+                    "description": "Discards processed reads that are shorter than specified length.",
+                    "type": "number",
+                    "default": 20
+                },
+                "times_trimmed": {
+                    "name": "Times trimmed",
+                    "description": "Number of times a read will be adaptor trimmed.",
+                    "type": "number",
+                    "default": 1
+                },
+                "cut_end": {
+                    "name": "Cut read end",
+                    "description": "Number of bases to cut from the end of reads. Positive value for removing from the 5' end or negative value for removing from the 3'end. ",
+                    "type": "number",
+                    "default": 0
+                },
+                "save_trimmed": {
+                    "name": "Save processed reads",
+                    "description": "Save processed reads and intermediate FASTQ files.",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        {
+            "name": "Pre-mapping Settings",
+            "description": "Settings to control pre-mapping to the contaminants FASTA.",
+            "advanced" : true,
+            "properties": {
+                "skip_premap": {
+                    "name": "Skip pre-mapping",
+                    "description": "Skip pre-mapping to the smRNA FASTA, typically containing rRNA and tRNA sequences.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "bowtie2_args": {
+                    "name": "Pre-mapping options",
+                    "description": "Specifies the command line options for bowtie2.",
+                    "type": "string",
+                    "default": "--norc --no-unal --very-sensitive-local -L 18 -N 1"
+                }
+            }
+        },
+        {
+            "name": "Genome Alignment Settings",
+            "description": "Settings to control alignment to the genome.",
+            "advanced" : true,
+            "properties": {
+                "star_args": {
+                    "name": "Genome alignment options",
+                    "description": "Specifies the command line options for STAR.",
+                    "type": "string",
+                    "default": "--readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --seedSearchStartLmax 15 --outReadsUnmapped Fastx --genomeLoad NoSharedMemory --outFilterMultimapNmax 1 --outFilterMismatchNoverReadLmax 0.08 --alignEndsType EndToEnd --quantMode TranscriptomeSAM --outSAMattributes Standard --quantTranscriptomeBan Singleend"
+                }
+            }
+        },
+        {
+            "name": "Ribo-seq Quality Control Settings",
+            "description": "Settings to control generation of quality control files.",
+            "advanced" : true,
+            "properties": {
+                "skip_qc": {
+                    "name": "Skip quality control",
+                    "description": "Skip generation of quality control files.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "expected_length": {
+                    "name": "Expected read lengths range",
+                    "description": "Expected read lengths range for quality control plots and P-site identification, using the pattern: minimum:maximum.",
+                    "type": "string",
+                    "default": "26:32"
+                }
+            }
+        },
+        {
+            "name": "Gene-level Counts Settings",
+            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
+            "advanced" : false,
+            "properties": {
+                "strandedness": {
+                    "name": "Library strandedness",
+                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
+                    "type": "string",
+                    "required": true
+                },
+                "feature": {
+                    "name": "Feature used for gene-level counting",
+                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
+                    "type": "string",
+                    "required": false
+                }
+            }
+        },
+        {
+            "name": "P-site Identification Settings",
+            "description": "Settings to control P-site identification, quantification and diagnostics",
+            "advanced" : true,
+            "properties": {
+                "skip_psite": {
+                    "name": "Skip P-site Identification",
+                    "description": "Skip P-site dentification and generation of riboWaltz diagnotics plots.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "psite_method": {
+                    "name": "P-site identification method using riboWaltz",
+                    "description": "Specifies method used for P-site offsets identification. Options are ribowaltz (default) or global_max_5end. For ribowaltz P-site offsets are defined using the riboWaltz method. See https://github.com/LabTranslationalArchitectomics/riboWaltz/ for more details. For global_max_5end P-site offsets are defined by the distances between the first nucleotide of the translation initiation site and the nucleotide corresponding to the global maximum of the read length-specific 5'end profiles.",
+                    "type": "string",
+                    "default": "ribowaltz"
+                },
+                "exclude_start": {
+                    "name": "Number of nucleotides 3' from the start codon to be excluded from CDS P-site coverage",
+                    "description": "Specifies the number of nucleotides 3' from the start codon to be excluded from CDS P-site quantification (default 42, i.e. exclude the first 14 codons).",
+                    "type": "number",
+                    "default": 42
+                },
+                "exclude_stop": {
+                    "name": "Number of nucleotides 5' from the stop codon to be excluded from CDS P-site coverage",
+                    "description": "Specifies the number of nucleotides 5' from the stop codon to be excluded from CDS P-site quantification (default 27, i.e. exclude the last 9 codons).",
+                    "type": "number",
+                    "default": 27
+                },
+                "genomic_codon_coverage": {
+                    "name": "Generate codon resolution P-site tracks in genomic coordinates.",
+                    "description": "Generate codon resolution P-site tracks in genomic coordinates in BED format.",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        {
+            "name": "Design of sgRNA Templates Settings",
+            "description": "Settings for the Design of sgRNA Templates to Deplete Unwanted Abundant Contaminants using Ribocutter. See https://www.biorxiv.org/content/10.1101/2021.07.14.451473v1.full for more details.",
+            "advanced" : true,
+            "properties": {
+                "skip_ribocutter": {
+                    "name": "Skip design of sgRNA templates",
+                    "description": "Skip design of sgRNA templates with Ribocutter.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "guide_number": {
+                    "name": "Number of guides",
+                    "description": "Number of guides to be designed by Ribocutter for the depletion of unwanted abundant contaminants.",
+                    "type": "number",
+                    "default": 50
+                },
+                "max_reads": {
+                    "name": "Maximum number of reads to be used for guide design",
+                    "description": "Maximum number of reads to be used by Ribocutter for designing guides for the depletion of unwanted abundant contaminants.",
+                    "type": "number",
+                    "default": 1000000
+                },
+                "min_read_length": {
+                    "name": "Minimum length for reads to be used for guide design",
+                    "description": "Minimum read length for Ribocutter to design guides for the depletion of unwanted abundant contaminants. By default, all read lengths are considered, and additionally Ribocutter is also run on reads longer or equal to 23.",
+                    "type": "number",
+                    "default": 1
+                }
+
+            }
+        },
+        {
+            "name": "Coverage Tracks Settings",
+            "description": "Settings for Generating Track Files for Genome Browser Viewing.",
+            "advanced" : true,
+            "properties": {
+                "bin_size": {
+                    "name": "Number of nucleotides specifying bin size",
+                    "description": "Size of the bins, in bases, for the output of the bigwig/bedgraph file.",
+                    "type": "number",
+                    "default": 1
+                },
+                "track_format": {
+                    "name": "Format of the coverage tracks",
+                    "description": "Output coverage tracks file type. Either bigwig or bedgraph.",
+                    "type": "string",
+                    "default": "bigwig"
+                }
+            }
+        },
+        {
+            "name": "Command Line Options",
+            "description": "Provide customised command line options to specific processes.",
+            "advanced": true,
+            "properties": {
+                "extra_ribocutter_args": {
+                    "name": "Additional Ribocutter parameters",
+                    "description": "Additional parameters for guide design with Ribocutter. See https://www.biorxiv.org/content/10.1101/2021.07.14.451473v1.full for more details.",
+                    "type": "string"
+                }
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "MultiQC report",
+            "description": "Report aggregating all QC reporting including FastQC, alignment stats and DeSeq2 plots.",
+            "filetype": "html",
+            "process": "MULTIQC"
+        },
+        {
+            "name": "Normalised bigwig fwd",
+            "description": "Genome-wide coverage bigwig to be viewed in genome browser. Contains reads mapping to fwd strand.",
+            "filetype": "bigWig",
+            "process": "BEDGRAPH_BEDCLIP_BEDGRAPHTOBIGWIG_FORWARD:UCSC_BEDGRAPHTOBIGWIG"
+        },
+        {
+            "name": "Normalised bigwig rev",
+            "description": "Genome-wide coverage bigwig to be viewed in genome browser. Contains reads mapping to rev strand.",
+            "filetype": "bigWig",
+            "process": "BEDGRAPH_BEDCLIP_BEDGRAPHTOBIGWIG_REVERSE:UCSC_BEDGRAPHTOBIGWIG"
+        },
+        {
+            "name": "Salmon transcript TPM table",
+            "description": "Table containing transcript per million (TPM) quantified transcripts per sample.",
+            "pattern": "transcript_tpm.tsv$",
+            "process": "SALMON_TXIMPORT"
+        },
+        {
+            "name": "Salmon transcript raw counts for downstream analysis",
+            "description": "RDS file containing transcript raw counts per sample.",
+            "filetype": "rds",
+            "process": "SALMON_SE_TRANSCRIPT"
+        },
+        {
+            "name": "Salmon gene TPM table",
+            "description": "Table containing transcript per million (TPM) quantified genes per sample.",
+            "pattern": "gene_tpm.tsv$",
+            "process": "SALMON_TXIMPORT"
+        },
+        {
+            "name": "Salmon gene raw counts for DeSeq2",
+            "description": "RDS file containing gene raw counts per sample.",
+            "filetype": "rds",
+            "process": "SALMON_SE_GENE"
+        },
+        {
+            "name": "RSEM counts",
+            "description": "Tables containing gene and transcript counts per sample as quantified by RSEM.",
+            "filetype": "tsv",
+            "process": "RSEM_MERGE_COUNTS"
+        }
+    ]
+}
