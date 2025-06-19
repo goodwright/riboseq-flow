@@ -134,7 +134,7 @@
                     "name": "3' adaptor",
                     "description": "3' adaptor sequence for Cutadapt trimming",
                     "type": "string",
-                    "default": null
+                    "default": ""
                 },
                 "adapter_fiveprime": {
                     "name": "5' adaptor",
