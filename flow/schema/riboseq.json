@@ -87,7 +87,7 @@
             "name": "UMI Settings",
             "description": "Settings for dealing with UMIs",
             "advanced" : false,
-            "properties": {
+            "params": {
                 "with_umi": {
                     "name": "Deduplicate based on UMIs",
                     "description": "Enable UMI-based read deduplication.",
@@ -123,7 +123,7 @@
             "name": "Read Processing Settings",
             "description": "Settings to control read quality, adaptor trimming, removal of bases from read ends and filtering based on a minimum length threshold.",
             "advanced" : false,
-            "properties": {
+            "params": {
                 "skip_trimming": {
                     "name": "Skip trimming and length-filtering",
                     "description": "Skip the adapter trimming step and read length filtering step.",
@@ -177,7 +177,7 @@
             "name": "Pre-mapping Settings",
             "description": "Settings to control pre-mapping to the contaminants FASTA.",
             "advanced" : true,
-            "properties": {
+            "params": {
                 "skip_premap": {
                     "name": "Skip pre-mapping",
                     "description": "Skip pre-mapping to the smRNA FASTA, typically containing rRNA and tRNA sequences.",
@@ -196,7 +196,7 @@
             "name": "Genome Alignment Settings",
             "description": "Settings to control alignment to the genome.",
             "advanced" : true,
-            "properties": {
+            "params": {
                 "star_args": {
                     "name": "Genome alignment options",
                     "description": "Specifies the command line options for STAR.",
@@ -209,7 +209,7 @@
             "name": "Ribo-seq Quality Control Settings",
             "description": "Settings to control generation of quality control files.",
             "advanced" : true,
-            "properties": {
+            "params": {
                 "skip_qc": {
                     "name": "Skip quality control",
                     "description": "Skip generation of quality control files.",
@@ -228,7 +228,7 @@
             "name": "Gene-level Counts Settings",
             "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
             "advanced" : false,
-            "properties": {
+            "params": {
                 "strandedness": {
                     "name": "Library strandedness",
                     "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
@@ -247,7 +247,7 @@
             "name": "P-site Identification Settings",
             "description": "Settings to control P-site identification, quantification and diagnostics",
             "advanced" : true,
-            "properties": {
+            "params": {
                 "skip_psite": {
                     "name": "Skip P-site Identification",
                     "description": "Skip P-site dentification and generation of riboWaltz diagnotics plots.",
@@ -284,7 +284,7 @@
             "name": "Design of sgRNA Templates Settings",
             "description": "Settings for the Design of sgRNA Templates to Deplete Unwanted Abundant Contaminants using Ribocutter. See https://www.biorxiv.org/content/10.1101/2021.07.14.451473v1.full for more details.",
             "advanced" : true,
-            "properties": {
+            "params": {
                 "skip_ribocutter": {
                     "name": "Skip design of sgRNA templates",
                     "description": "Skip design of sgRNA templates with Ribocutter.",
@@ -316,7 +316,7 @@
             "name": "Coverage Tracks Settings",
             "description": "Settings for Generating Track Files for Genome Browser Viewing.",
             "advanced" : true,
-            "properties": {
+            "params": {
                 "bin_size": {
                     "name": "Number of nucleotides specifying bin size",
                     "description": "Size of the bins, in bases, for the output of the bigwig/bedgraph file.",
@@ -335,7 +335,7 @@
             "name": "Command Line Options",
             "description": "Provide customised command line options to specific processes.",
             "advanced": true,
-            "properties": {
+            "params": {
                 "extra_ribocutter_args": {
                     "name": "Additional Ribocutter parameters",
                     "description": "Additional parameters for guide design with Ribocutter. See https://www.biorxiv.org/content/10.1101/2021.07.14.451473v1.full for more details.",
