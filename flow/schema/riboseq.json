@@ -21,7 +21,7 @@
                             "render": false
                         },
                         {
-                            "name": "fastq_1",
+                            "name": "fastq",
                             "type": "data",
                             "from_sample": 1,
                             "required": true,
