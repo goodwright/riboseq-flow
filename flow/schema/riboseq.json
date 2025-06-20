@@ -61,7 +61,7 @@
                 },
                 "contaminant_fasta": {
                     "name": "contaminant sequences FASTA",
-                    "type": "file",
+                    "type": "data",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "required": true,
                     "execution_output": {
@@ -84,9 +84,28 @@
             }
         },
         {
+            "name": "Gene-level Counts Settings",
+            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
+            "advanced" : false,
+            "params": {
+                "strandedness": {
+                    "name": "Library strandedness",
+                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
+                    "type": "string",
+                    "required": true
+                },
+                "feature": {
+                    "name": "Feature used for gene-level counting",
+                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
+                    "type": "string",
+                    "required": false
+                }
+            }
+        },
+        {
             "name": "UMI Settings",
             "description": "Settings for dealing with UMIs",
-            "advanced" : false,
+            "advanced" : true,
             "params": {
                 "with_umi": {
                     "name": "Deduplicate based on UMIs",
@@ -122,7 +141,7 @@
         {
             "name": "Read Processing Settings",
             "description": "Settings to control read quality, adaptor trimming, removal of bases from read ends and filtering based on a minimum length threshold.",
-            "advanced" : false,
+            "advanced" : true,
             "params": {
                 "skip_trimming": {
                     "name": "Skip trimming and length-filtering",
@@ -221,25 +240,6 @@
                     "description": "Expected read lengths range for quality control plots and P-site identification, using the pattern: minimum:maximum.",
                     "type": "string",
                     "default": "26:32"
-                }
-            }
-        },
-        {
-            "name": "Gene-level Counts Settings",
-            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
-            "advanced" : false,
-            "params": {
-                "strandedness": {
-                    "name": "Library strandedness",
-                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
-                    "type": "string",
-                    "required": true
-                },
-                "feature": {
-                    "name": "Feature used for gene-level counting",
-                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
-                    "type": "string",
-                    "required": false
                 }
             }
         },
