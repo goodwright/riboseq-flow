@@ -60,14 +60,10 @@
                     "description": "An annotation for the genome."
                 },
                 "contaminant_fasta": {
-                    "name": "contaminant sequences FASTA",
+                    "name": "Contaminant sequences FASTA",
                     "type": "data",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "required": true,
-                    "execution_output": {
-                        "process": null,
-                        "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$"
-                    },
                     "description": "FASTA file to be mapped to before the genome file, containing rRNA, tRNA sequences, snRNAs and other contaminant sequences."
                 },
                 "star_index": {
