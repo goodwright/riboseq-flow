@@ -59,7 +59,7 @@
                     },
                     "description": "An annotation for the genome."
                 },
-                "contaminant_fasta": {
+                "contaminants_fasta": {
                     "name": "Contaminant sequences FASTA",
                     "type": "data",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
