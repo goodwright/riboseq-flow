@@ -62,7 +62,7 @@
                 "contaminants_fasta": {
                     "name": "Contaminant sequences FASTA",
                     "type": "data",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "pattern": "^(?=\\S*contaminants)\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "required": true,
                     "description": "FASTA file to be mapped to before the genome file, containing rRNA, tRNA sequences, snRNAs and other contaminant sequences."
                 },
