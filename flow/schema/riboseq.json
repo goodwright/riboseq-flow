@@ -80,25 +80,6 @@
             }
         },
         {
-            "name": "Gene-level Counts Settings",
-            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
-            "advanced" : false,
-            "params": {
-                "strandedness": {
-                    "name": "Library strandedness",
-                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
-                    "type": "string",
-                    "required": true
-                },
-                "feature": {
-                    "name": "Feature used for gene-level counting",
-                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
-                    "type": "string",
-                    "required": false
-                }
-            }
-        },
-        {
             "name": "UMI Settings",
             "description": "Settings for dealing with UMIs",
             "advanced" : true,
@@ -131,6 +112,26 @@
                     "description": "The UMI barcode separator in read name to use for UMI-based deduplication",
                     "type": "string",
                     "default": "_"
+                }
+            }
+        },
+        {
+            "name": "Gene-level Counts Settings",
+            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
+            "advanced" : true,
+            "params": {
+                "strandedness": {
+                    "name": "Library strandedness",
+                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
+                    "type": "string",
+                    "default": "forward",
+                    "required": true
+                },
+                "feature": {
+                    "name": "Feature used for gene-level counting",
+                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
+                    "type": "string",
+                    "required": false
                 }
             }
         },
