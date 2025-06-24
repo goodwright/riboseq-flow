@@ -1,7 +1,7 @@
 {
     "inputs": [
         {
-            "name": "Sample options",
+            "name": "Sample Options",
             "description": "Parameters relating to the sample being analysed.",
             "advanced": false,
             "params": {
@@ -32,7 +32,7 @@
             }
         },
         {
-            "name": "Genome options",
+            "name": "Genome Options",
             "description": "The genome being aligned to.",
             "advanced": false,
             "from_execution": true,
@@ -86,7 +86,7 @@
         {
             "name": "UMI Settings",
             "description": "Settings for dealing with UMIs",
-            "advanced" : true,
+            "advanced" : false,
             "params": {
                 "with_umi": {
                     "name": "Deduplicate based on UMIs",
@@ -120,29 +120,9 @@
             }
         },
         {
-            "name": "Gene-level Counts Settings",
-            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
-            "advanced" : true,
-            "params": {
-                "strandedness": {
-                    "name": "Library strandedness",
-                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
-                    "type": "string",
-                    "default": "forward",
-                    "required": true
-                },
-                "feature": {
-                    "name": "Feature used for gene-level counting",
-                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
-                    "type": "string",
-                    "required": false
-                }
-            }
-        },
-        {
             "name": "Read Processing Settings",
             "description": "Settings to control read quality, adaptor trimming, removal of bases from read ends and filtering based on a minimum length threshold.",
-            "advanced" : true,
+            "advanced" : false,
             "params": {
                 "skip_trimming": {
                     "name": "Skip trimming and length-filtering",
@@ -241,6 +221,25 @@
                     "description": "Expected read lengths range for quality control plots and P-site identification, using the pattern: minimum:maximum.",
                     "type": "string",
                     "default": "26:32"
+                }
+            }
+        },
+        {
+            "name": "Gene-level Counts Settings",
+            "description": "Settings to control gene-level quantifcation from genome-aligned reads.",
+            "advanced" : false,
+            "params": {
+                "strandedness": {
+                    "name": "Library strandedness",
+                    "description": "Library strandedness for FeatureCounts gene-level quantification. Options are forward, reverse or unstranded.",
+                    "type": "string",
+                    "required": true
+                },
+                "feature": {
+                    "name": "Feature used for gene-level counting",
+                    "description": "Feature used for FeatureCounts gene-level read summarisation. Options are exon or CDS.",
+                    "type": "string",
+                    "required": false
                 }
             }
         },
