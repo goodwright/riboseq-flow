@@ -85,7 +85,7 @@
         },
         {
             "name": "UMI Settings",
-            "description": "Settings for dealing with UMIs",
+            "description": "Settings for dealing with UMIs. Note that one of 'Deduplicate based on UMIs' or 'Skip UMI extraction' must be enabled.",
             "advanced" : false,
             "params": {
                 "with_umi": {
