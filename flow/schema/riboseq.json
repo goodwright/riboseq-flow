@@ -347,52 +347,52 @@
     ],
     "outputs": [
         {
-            "name": "MultiQC report",
-            "description": "Report aggregating all QC reporting including FastQC, alignment stats and DeSeq2 plots.",
+            "name": "Genome and Transcriptomic Alignment BAM (UMI-deduplicated)",
+            "description": "Genome and transcriptomic alignments (UMI-deduplicated) in BAM format for downstream analyses and genome browser viewing.",
+            "filetype": "bam",
+            "process": "DEDUPLICATE"
+        },
+        {
+            "name": "Genome and Transcriptomic Alignment BAM (Before Deduplication)",
+            "description": "Genome and transcriptomic alignments (before deduplication) in BAM format for downstream analyses and genome browser viewing.",
+            "filetype": "bam",
+            "process": "MAP"
+        },
+        {
+            "name": "Gene-level Counts",
+            "description": "Gene count table in tsv format.",
+            "filetype": "tsv.gz",
+            "process": "MERGE_FEATURECOUNTS"
+        },
+        {
+            "name": "Coverage Tracks",
+            "description": "Coverage tracks in bigWig or bedGraph format.",
+            "filetype": "bigwig",
+            "process": "GET_COVERAGE_TRACKS"
+        },
+        {
+            "name": "Coverage Tracks",
+            "description": "Coverage tracks in bigWig or bedGraph format.",
+            "filetype": "bedgraph",
+            "process": "GET_COVERAGE_TRACKS"
+        },
+        {
+            "name": "P-site information",
+            "description": "Per-sample TSV file with P-site information for each read.",
+            "filetype": "psite.tsv.gz",
+            "process": "IDENTIFY_PSITES"
+        },
+        {
+            "name": "Ribo-seq QC",
+            "description": "Riboseq QC metrics extracted from FASTQ and alignment files. Per-sample and summary PDF files with graphs showing the number of reads, proprtions of pre-mapping and uniquely mapping reads to the genome, coverage of read extremities around start and stop codons, frame, stratified by length, as well as duplication and fraction of reads uniquely mapping to the longest CDS isoform for each gene.",
+            "filetype": "pdf",
+            "process": "RIBOSEQ_QC"
+        },
+        {
+            "name": "Quality control report",
+            "description": "MultiQC report of read and alignment quality control metrics.",
             "filetype": "html",
             "process": "MULTIQC"
-        },
-        {
-            "name": "Normalised bigwig fwd",
-            "description": "Genome-wide coverage bigwig to be viewed in genome browser. Contains reads mapping to fwd strand.",
-            "filetype": "bigWig",
-            "process": "BEDGRAPH_BEDCLIP_BEDGRAPHTOBIGWIG_FORWARD:UCSC_BEDGRAPHTOBIGWIG"
-        },
-        {
-            "name": "Normalised bigwig rev",
-            "description": "Genome-wide coverage bigwig to be viewed in genome browser. Contains reads mapping to rev strand.",
-            "filetype": "bigWig",
-            "process": "BEDGRAPH_BEDCLIP_BEDGRAPHTOBIGWIG_REVERSE:UCSC_BEDGRAPHTOBIGWIG"
-        },
-        {
-            "name": "Salmon transcript TPM table",
-            "description": "Table containing transcript per million (TPM) quantified transcripts per sample.",
-            "pattern": "transcript_tpm.tsv$",
-            "process": "SALMON_TXIMPORT"
-        },
-        {
-            "name": "Salmon transcript raw counts for downstream analysis",
-            "description": "RDS file containing transcript raw counts per sample.",
-            "filetype": "rds",
-            "process": "SALMON_SE_TRANSCRIPT"
-        },
-        {
-            "name": "Salmon gene TPM table",
-            "description": "Table containing transcript per million (TPM) quantified genes per sample.",
-            "pattern": "gene_tpm.tsv$",
-            "process": "SALMON_TXIMPORT"
-        },
-        {
-            "name": "Salmon gene raw counts for DeSeq2",
-            "description": "RDS file containing gene raw counts per sample.",
-            "filetype": "rds",
-            "process": "SALMON_SE_GENE"
-        },
-        {
-            "name": "RSEM counts",
-            "description": "Tables containing gene and transcript counts per sample as quantified by RSEM.",
-            "filetype": "tsv",
-            "process": "RSEM_MERGE_COUNTS"
         }
     ]
 }
