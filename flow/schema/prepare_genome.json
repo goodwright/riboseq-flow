@@ -26,7 +26,7 @@
                     "name": "Contaminants FASTA",
                     "type": "data",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "fileset_pattern": "contaminants_fasta",
+                    "fileset_pattern": "^(?=\\S*smrna)\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "required": true,
                     "description": "FASTA file to be mapped to before the genome file, containing rRNA, tRNA sequences, snRNAs and other contaminant sequences."
                 }
