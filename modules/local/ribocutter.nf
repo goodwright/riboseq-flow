@@ -54,7 +54,7 @@ process GET_PROPORTION_TARGETED {
 
     label 'process_single'
 
-    container 'iraiosub/nf-riboseq-qc:latest'
+    container 'docker.io/iraiosub/nf-riboseq-qc:latest'
 
     publishDir "${params.outdir}/ribocutter"
 

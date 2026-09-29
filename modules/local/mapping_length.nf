@@ -8,7 +8,7 @@ process MAPPING_LENGTH_ANALYSIS {
     tag "${sample_id}"
     label 'process_medium'
 
-    container 'iraiosub/nf-riboseq-qc:latest'
+    container 'docker.io/iraiosub/nf-riboseq-qc:latest'
 
     publishDir "${params.outdir}/riboseq_qc/mapping_length_analysis", pattern: "*.csv", mode: 'copy', overwrite: true
     

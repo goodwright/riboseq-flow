@@ -55,7 +55,7 @@ process MERGE_FEATURECOUNTS {
     label 'process_single'
 
     // conda '/camp/lab/ulej/home/users/luscomben/users/iosubi/projects/riboseq_nf/riboseq/env.yml'
-    container 'iraiosub/nf-riboseq-qc:latest'
+    container 'docker.io/iraiosub/nf-riboseq-qc:latest'
 
     publishDir "${params.outdir}/featurecounts", pattern: "*.featureCounts.tsv.gz", mode: 'copy', overwrite: true
 
