@@ -8,7 +8,7 @@ process GET_TRANSCRIPT_INFO {
     tag "$gtf"
     label 'process_single'
 
-    container 'iraiosub/nf-riboseq:latest'
+    container 'docker.io/iraiosub/nf-riboseq:latest'
 
     publishDir "${params.outdir}/annotation", mode: 'copy', overwrite: true
 
