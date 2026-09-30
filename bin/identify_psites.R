@@ -4,7 +4,23 @@
 # Author: Ira Iosub
 # Usage: get_p_sites.R -b $bam_folder -g $gtf -f $fasta -l $length_range
 
+# Apply before loading riboWaltz, including when this script is run directly.
+# The launcher also sets these before R starts (needed for native libraries).
+Sys.setenv(OMP_NUM_THREADS = "1", OMP_THREAD_LIMIT = "1",
+           OPENBLAS_NUM_THREADS = "1", MKL_NUM_THREADS = "1",
+           R_DATATABLE_NUM_THREADS = "1")
+data.table::setDTthreads(1L)
+message("[P-sites] loading riboWaltz; data.table threads=", data.table::getDTthreads())
 suppressPackageStartupMessages(library(riboWaltz))
+runtime_info <- capture.output({
+  print(sessionInfo())
+  print(Sys.getenv(c("OMP_NUM_THREADS", "OMP_THREAD_LIMIT", "OPENBLAS_NUM_THREADS",
+                     "MKL_NUM_THREADS", "R_DATATABLE_NUM_THREADS")))
+  print(data.table::getDTthreads(verbose = TRUE))
+})
+writeLines(runtime_info, "psite_runtime.txt")
+# stderr remains available in Flow even when a failed task publishes no files.
+message(paste(runtime_info, collapse = "\n"))
 # suppressPackageStartupMessages(library(optparse))
 
 # =========
@@ -173,10 +189,15 @@ stop_quietly <- function() {
 # =========
 
 # Prepare annotation: for each transcript, obtain total length, 5'UTR, CDS and 3'UTR length, respectively.
+message("[P-sites] create_annotation BEGIN")
 annotation.dt <- create_annotation(gtf)
+message("[P-sites] create_annotation END; rows=", nrow(annotation.dt))
+message("[P-sites] annotation export BEGIN")
 data.table::fwrite(annotation.dt, 
                    paste0(getwd(), "/", strsplit(gtf, "gtf")[[1]][1],"transcript_info.tsv.gz"),
                    sep = "\t")
+
+message("[P-sites] annotation export END")
 
 # Load BAM files
 
@@ -196,9 +217,12 @@ names(name_of_bams) <- lapply(bams, function(x) strsplit(basename(x), ".bam")[[1
 sample_count <- length(bams)
 
 # Load bams
+message("[P-sites] bamtolist BEGIN")
 reads.ls <- bamtolist(bamfolder = getwd(), 
                       annotation = annotation.dt,
                       name_samples = unlist(name_of_bams))
+
+message("[P-sites] bamtolist END")
 
 # Order named list alphabetically
 reads.ls <- reads.ls[order(names(reads.ls))]

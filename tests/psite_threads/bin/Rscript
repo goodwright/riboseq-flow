@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Launcher regression only: substitute R to inspect the actual task environment.
+set -euo pipefail
+for var in OMP_NUM_THREADS OMP_THREAD_LIMIT OPENBLAS_NUM_THREADS MKL_NUM_THREADS R_DATATABLE_NUM_THREADS; do
+    if [[ ${!var:-unset} != 1 ]]; then
+        echo "FAIL: $var=${!var:-unset}" >&2
+        exit 1
+    fi
+done
+[[ "$1" == --vanilla && "$6" == 26:34 && "$7" == 50 && "$8" == ribowaltz && "$9" == 42 && "${10}" == 27 ]]
+printf '%s\n' 'PASS: native thread limits are one; scientific arguments preserved' > psite_runtime.txt
