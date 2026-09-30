@@ -21,6 +21,7 @@ process IDENTIFY_PSITES {
     path(transcript_info)
 
     output:
+    path("psite_runtime.txt"), emit: runtime_info, optional: true
     path("psite_offset.tsv.gz"), emit: psite_offset, optional: true
     path("offset_plot/*"), emit: offset_plot, optional: true
     path("*.psite.tsv.gz"), emit: psites, optional: true
@@ -39,6 +40,14 @@ process IDENTIFY_PSITES {
     // identify_p_sites.R -b $bam_folder -g $gtf -f $fasta -l $length_range --qc --method --periodicity
 
         """
+
+        # Bound native threads before R loads its shared libraries. This is a
+        # conservative mitigation for the annotation-stage allocator crash.
+        export OMP_NUM_THREADS=1
+        export OMP_THREAD_LIMIT=1
+        export OPENBLAS_NUM_THREADS=1
+        export MKL_NUM_THREADS=1
+        export R_DATATABLE_NUM_THREADS=1
 
         INPUT=`echo $bam_list | sed 's/ /,/g'`
 
