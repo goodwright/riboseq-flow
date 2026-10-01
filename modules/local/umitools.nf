@@ -21,8 +21,11 @@ process UMITOOLS_EXTRACT {
         tuple val(sample_id), path("*.umi_extract.log"), emit: log
 
     script:
-    args = " --bc-pattern=" + params.umi_pattern
-    args += " --extract-method=" + params.umi_extract_method
+    // Quote parameter values here, where the task shell command is built.
+    // Regex metacharacters must reach umi_tools unchanged, as one argument.
+    def shellQuote = { value -> "'" + value.toString().replace("'", "'\"'\"'") + "'" }
+    args = " --bc-pattern=" + shellQuote(params.umi_pattern)
+    args += " --extract-method=" + shellQuote(params.umi_extract_method)
 
     """
     umi_tools \

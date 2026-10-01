@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+# Check the actual argv delivered by the production Nextflow module.
+import argparse, pathlib, gzip
+p=argparse.ArgumentParser()
+p.add_argument('command')
+p.add_argument('-I'); p.add_argument('-S'); p.add_argument('-L')
+p.add_argument('--bc-pattern'); p.add_argument('--extract-method')
+a=p.parse_args()
+assert a.command == 'extract'
+assert a.bc_pattern == pathlib.Path(a.I).read_text(), repr(a.bc_pattern)
+assert a.extract_method in ('regex', 'string')
+with gzip.open(a.S,'wt') as f: f.write('@test\nACGT\n+\nIIII\n')
+pathlib.Path(a.L).write_text('PASS: barcode pattern preserved as a single literal argument\n')
+print('PASS: barcode pattern preserved as a single literal argument')
